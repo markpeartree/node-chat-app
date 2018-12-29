@@ -18,6 +18,23 @@ io.on('connection', (socket) => {
     console.log('user disconnected')
   });
 
+  socket.on('createMessage', (newMessage) => {
+    console.log('newMessage:', newMessage)
+    sendBack(newMessage);
+  });
+
+  var sendBack = (message) => {
+    var dt = new Date()
+    message.createdAt = dt.getTime()
+    socket.emit('newMessage', message)
+  };
+
+  socket.emit('newMessage', {
+    text: "dude",
+    from: "markp@gmail.com",
+    createdAt: "now"
+  },);
+
 });
 
 server.listen(port, () => {
