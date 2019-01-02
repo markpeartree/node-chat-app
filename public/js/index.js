@@ -14,5 +14,7 @@ socket.on('disconnect', function () {
 
 socket.on('newMessage', function (email) {
   console.log('newMessage', email);
-  document.getElementById('par').innerText = `${email.text}  ${email.from}  ${email.createdAt}`;
+  var elem = document.getElementById('par');
+  elemTxt = document.getElementById('par').innerHTML;
+  elem.innerHTML = `${elemTxt} <br> ${email.text}  ${email.from}  ${email.createdAt}`;
 });
