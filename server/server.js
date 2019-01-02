@@ -24,17 +24,9 @@ io.on('connection', (socket) => {
   });
 
   var sendBack = (message) => {
-    var dt = new Date()
-    message.createdAt = dt.getTime()
-    socket.emit('newMessage', message)
+    message.createdAt = new Date().getTime()
+    io.emit('newMessage', message)
   };
-
-  socket.emit('newMessage', {
-    text: "dude",
-    from: "markp@gmail.com",
-    createdAt: "now"
-  },);
-
 });
 
 server.listen(port, () => {
