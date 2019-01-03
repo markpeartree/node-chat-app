@@ -23,9 +23,10 @@ io.on('connection', (socket) => {
     sendBack({from: "Admin", text: "User disconnected"})
   });
 
-  socket.on('createMessage', (newMessage) => {
+  socket.on('createMessage', (newMessage, callback) => {
     console.log('newMessage:', newMessage)
     sendBack(newMessage);
+    callback('this is from the server');
   });
 
   var sendBack = (message) => {
