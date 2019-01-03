@@ -3,7 +3,7 @@ const publicPath = path.join(__dirname, '../public');
 const socketIO = require('socket.io');
 const http = require('http');
 
-const {generateMessage} = require('./utils/message')
+const {generateMessage, generateLocationMessage} = require('./utils/message')
 
 const express = require('express');
 var app = express();
@@ -18,20 +18,15 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('newMessage', generateMessage("Admin", "New user connected"));
   socket.emit('newMessage', generateMessage("Admin", "Welcom to the chat app"));
 
-  socket.on('disconnect', (socket) => {
-    console.log('user disconnected')
-    sendBack({from: "Admin", text: "User disconnected"})
-  });
-
-  socket.on('createMessage', (newMessage, callback) => {
-    console.log('newMessage:', newMessage)
-    sendBack(newMessage);
+  socket.on('createMessage', (message, callback) => {
+    console.log('newMessage:', message)
+    io.emit('newMessage', generateMessage(message.from, message.text));
     callback('this is from the server');
   });
 
-  var sendBack = (message) => {
-    io.emit('newMessage', generateMessage(message.from, message.text));
-  };
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
+  });
 });
 
 server.listen(port, () => {
